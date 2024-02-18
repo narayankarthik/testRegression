@@ -13,9 +13,9 @@ from pyspark.dbutils import DBUtils
 table_name='customer'
 script_type='super_script'
 config_file_path=''
-env='dev'
+env='test'
 pod_name='dc'
-dbfs_folder_base_path='/dbfs/FileStore/tables/DaaSWealth_QA/Mainkar/'
+dbfs_folder_base_path='/dbfs/FileStore/testRepo/Mainkar/'
 extract_prep_flag='prep'
 passed_as_of_date='20230930'
 
@@ -25,8 +25,8 @@ print(f'passed_as_of_date:{passed_as_of_date}\nextract_prep_flag:{extract_prep_f
 
 # ----------
 
-sys.path.insert(1, f'{dbfs_folder_base_path}/python'.replace('//','/'))
-sys.path.insert(1, f'{dbfs_folder_base_path}/spark/common'.replace('//','/'))
+sys.path.insert(1, f'{dbfs_folder_base_path}/Scripts/python'.replace('//','/'))
+sys.path.insert(1, f'{dbfs_folder_base_path}/Scripts/spark/common'.replace('//','/'))
 import external_functions
 import dates_needed
 # import jtmf_update
@@ -102,11 +102,13 @@ conf = dates_needed.add_aditional_parameters(config_file_path, non_nullable_col=
 
 ####### Update this cell #######
 
-src_df = spark.sql(f"""
+df = spark.sql(f"""
                     select *
-                    from delta.`{onprm_table_cz_path}` 
-                    where process_date='{process_date}'
+                    from samples.tpch.customer 
+                    --where process_date='{process_date}'
+                    limit 1000
                     """)
+src_df = df
 # adding qa_ prefix to column names and changing it to lower case
 for col_name in src_df.columns:
     if col_name[:3] != 'qa_':
@@ -117,15 +119,6 @@ print("src_df count: {0}".format(src_df.count()))
 
 # ----------
 
-# # creating a file/table, incase view comparison takes time
-# try:
-#     spark.sql(f"drop table if exists wdar_qa.qa_{table_name}_final")
-#     src_df.write.format('delta').saveAsTable(f'wdar_qa.qa_{table_name}_final', path=f'{src_table_cz_path}')
-# except:
-#     dbutilspkg.fs.rm(f'{src_table_cz_path}',True)
-#     spark.sql(f"drop table if exists wdar_qa.qa_{table_name}_final")
-#     src_df.write.format('delta').saveAsTable(f'wdar_qa.qa_{table_name}_final', path=f'{src_table_cz_path}')
-# print(f"Have overwriten the new records to wdar_qa.qa_{table_name}_final.")
 # creating a view
 src_df.createOrReplaceGlobalTempView('temp_qa_{0}_final'.format(table_name))
 print(f"Have overwriten the new records to global temp view temp_qa_{table_name}_final.")
@@ -137,11 +130,7 @@ spark.sql(f"select count(*) from global_temp.temp_qa_{table_name}_final").show()
 
 # Tgt part
 # Reverse the comment on tgt_df once we have actual data in the table
-tgt_df = spark.sql(f"""
-                    select *
-                    from delta.`{tgt_table_cz_path}` 
-                    where process_date='{process_date}'
-                    """)
+tgt_df = df
 # changing columns to lower case
 for col_name in tgt_df.columns:
     tgt_df = tgt_df.withColumnRenamed(col_name, col_name.lower())

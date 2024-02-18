@@ -21,12 +21,14 @@ class All_Env_Specific_Variables:
         az_rahona_cdic_db = 'cdic,CDIC,edaaaaze1pca00wm0dwm0001,cdic'
         dev_cdic_db = 'cdic,CDIC,edaaaedle1devsrz,cdic'
         cz_staging_cdic_db = 'cdic,CDIC,edaaaedle1prdsrz,cdic'
+        test_cdic_db = ',,,'
 
         az_cif_db = 'home,srz/cif,edaaaazepca00wm00gs0001,cif'
         az_restrict_cif_db = 'home,srz/cif,edaaaazepca00wm00gs0001,cif,srz'
         az_rahona_cif_db = 'cif,CIF,edaaaaze1pca00wm0dwm0001,cif'
         dev_cif_db = 'cif,CIF,edaaaedle1devsrz,cif'
         cz_staging_cif_db = 'cif,CIF,edaaaedle1prdsrz,cif'
+        test_cif_db = ',,,'
 
         az_edw_db = 'home,srz/caedw,edaaaazepca00wm00gs0001,caedw'
         az_restrict_edw_db = 'home,srz/caedw,edaaaazepca00wm00gs0001,caedw,edw'
@@ -34,102 +36,119 @@ class All_Env_Specific_Variables:
         dev_edw_db = 'caedw,CAEDW,edaaaedle1devsrz,caedw'
         # cz_staging_edw_db = 'edw,EDW,edaaaedle1prdsrz,edw'
         cz_staging_edw_db = 'caedw,curated/caedw,edaaaecze1prdcz,caedw'
+        test_edw_db = ',,,'
 
         az_eoae_db = 'home,srz/eoae,edaaaazepca00wm00gs0001,eoae'
         az_restrict_eoae_db = 'home,srz/eoae,edaaaazepca00wm00gs0001,eoae,srz'
         az_rahona_eoae_db = 'eoae,curated/eoae,edaaaecze1prdcz,eoae'
         dev_eoae_db = 'eoae,EOAE,edaaaedle1devsrz,eoae'
         cz_staging_eoae_db = 'eoae,EOAE,edaaaedle1prdsrz,eoae'
+        test_eoae_db = ',,,'
 
         az_occw_db = 'home,srz/occw,edaaaazepca00wm00gs0001,occw'
         az_restrict_occw_db = 'home,srz/occw,edaaaazepca00wm00gs0001,occw,srz'
         az_rahona_occw_db = 'occw,OCCW,edaaaaze1pca00wm0dwm0001,occw'
         dev_occw_db = 'occw,OCCW,edaaaedle1devsrz,occw'
         cz_staging_occw_db = 'occw,OCCW,edaaaedle1prdsrz,occw'
+        test_occw_db = ',,,'
 
         az_odr_db = 'home,srz/odr,edaaaazepca00wm00gs0001,odr'
         az_restrict_odr_db = 'home,srz/odr,edaaaazepca00wm00gs0001,odr,srz'
         az_rahona_odr_db = 'odr,ODR,edaaaaze1pca00wm0dwm0001,odr'
         dev_odr_db = 'odr,ODR,edaaaedle1devsrz,odr'
         cz_staging_odr_db = 'odr,ODR,edaaaedle1prdsrz,odr'
+        test_odr_db = ',,,'
 
         az_ossbr_db = 'home,srz/ossbr,edaaaazepca00wm00gs0001,ossbr'
         az_restrict_ossbr_db = 'home,srz/ossbr,edaaaazepca00wm00gs0001,ossbr,srz'
         az_rahona_ossbr_db = 'ossbr,OSSBR,edaaaaze1pca00wm0dwm0001,ossbr'
         dev_ossbr_db = 'ossbr,OSSBR,edaaaedle1devsrz,ossbr'
         cz_staging_ossbr_db = 'ossbr,OSSBR,edaaaedle1prdsrz,ossbr'
+        test_ossbr_db = ',,,'
 
         az_ptsql_db = 'home,srz/ptsql,edaaaazepca00wm00gs0001,ptsql'
         az_restrict_ptsql_db = 'home,srz/ptsql,edaaaazepca00wm00gs0001,ptsql,srz'
         az_rahona_ptsql_db = 'ptsql,PTSQL,edaaaaze1pca00wm0dwm0001,ptsql'
         dev_ptsql_db = 'ptsql,PTSQL,edaaaedle1devsrz,ptsql'
         cz_staging_ptsql_db = 'ptsql,PTSQL,edaaaedle1prdsrz,ptsql'
+        test_ptsql_db = ',,,'
 
         az_sfw_db = 'home,srz/sfw,edaaaazepca00wm00gs0001,sfw'
         az_restrict_sfw_db = 'home,srz/sfw,edaaaazepca00wm00gs0001,sfw,srz'
         az_rahona_sfw_db = 'sfw,SFW,edaaaaze1pca00wm0dwm0001,sfw'
         dev_sfw_db = 'sfw,SFW,edaaaedle1devsrz,sfw'
         cz_staging_sfw_db = 'sfw,SFW,edaaaedle1prdsrz,sfw'
+        test_sfw_db = 'sfw,SFW,edaaaedle1prdsrz,sfw'
 
         az_upg_db = 'home,srz/upg,edaaaazepca00wm00gs0001,upg'
         az_restrict_upg_db = 'home,srz/upg,edaaaazepca00wm00gs0001,upg,srz'
         az_rahona_upg_db = 'upg,UPG,edaaaaze1pca00wm0dwm0001,upg'
         dev_upg_db = 'upg,UPG,edaaaedle1devsrz,upg'
         cz_staging_upg_db = 'upg,UPG,edaaaedle1prdsrz,upg'
+        test_upg_db = ',,,'
 
         az_wca_db = 'home,srz/wca,edaaaazepca00wm00gs0001,wca'
         az_restrict_wca_db = 'home,srz/wca,edaaaazepca00wm00gs0001,wca,srz'
         az_rahona_wca_db = 'wca,WCA,edaaaaze1pca00wm0dwm0001,wca'
         dev_wca_db = 'wca,WCA,edaaaedle1devsrz,wca'
         cz_staging_wca_db = 'wca,WCA,edaaaedle1prdsrz,wca'
+        test_wca_db = ',,,'
 
         az_wdlob_db = 'home,srz/wdlob,edaaaazepca00wm00gs0001,wdlob'
         az_restrict_wdlob_db = 'home,srz/wdlob,edaaaazepca00wm00gs0001,wdlob,srz'
         az_rahona_wdlob_db = 'wdlob,WDLOB,edaaaaze1pca00wm0dwm0001,wdlob'
         dev_wdlob_db = 'wdlob,WDLOB,edaaaedle1devsrz,wdlob'
         cz_staging_wdlob_db = 'wdlob,WDLOB,edaaaedle1prdsrz,wdlob'
+        test_wdlob_db = 'wdlob,WDLOB,edaaaedle1prdsrz,wdlob'
 
         az_wdorg_db = 'home,srz/wdorg,edaaaazepca00wm00gs0001,wdorg'
         az_restrict_wdorg_db = 'home,srz/wdorg,edaaaazepca00wm00gs0001,wdorg,srz'
         az_rahona_wdorg_db = 'wdorg,WDORG,edaaaaze1pca00wm0dwm0001,wdorg'
         dev_wdorg_db = 'wdorg,WDORG,edaaaedle1devsrz,wdorg'
         cz_staging_wdorg_db = 'wdorg,WDORG,edaaaedle1prdsrz,wdorg'
+        test_wdorg_db = ',,,'
 
         az_wdprm_db = 'home,srz/wdprm,edaaaazepca00wm00gs0001,wdprm'
         az_restrict_wdprm_db = 'home,srz/wdprm,edaaaazepca00wm00gs0001,wdprm,srz'
         az_rahona_wdprm_db = 'wdprm,WDPRM,edaaaaze1pca00wm0dwm0001,wdprm'
         dev_wdprm_db = 'wdprm,WDPRM,edaaaedle1devsrz,wdprm'
         cz_staging_wdprm_db = 'wdprm,WDPRM,edaaaedle1prdsrz,wdprm'
+        test_wdprm_db = ',,,'
 
         az_wds_db = 'home,srz/wds,edaaaazepca00wm00gs0001,wds'
         az_restrict_wds_db = 'home,srz/wds,edaaaazepca00wm00gs0001,wds,srz'
         az_rahona_wds_db = 'wds,WDS,edaaaaze1pca00wm0dwm0001,wds'
         dev_wds_db = 'wds,WDS,edaaaedle1devsrz,wds'
         cz_staging_wds_db = 'wds,WDS,edaaaedle1prdsrz,wds'
+        test_wds_db = ',,,'
 
         az_wdsm_db = 'home,srz/wdsm,edaaaazepca00wm00gs0001,wdsm'
         az_restrict_wdsm_db = 'home,srz/wdsm,edaaaazepca00wm00gs0001,wdsm,srz'
         az_rahona_wdsm_db = 'wdsm,WDSM,edaaaaze1pca00wm0dwm0001,wdsm'
         dev_wdsm_db = 'wdsm,WDSM,edaaaedle1devsrz,wdsm'
         cz_staging_wdsm_db = 'wdsm,WDSM,edaaaedle1prdsrz,wdsm'
+        test_wdsm_db = ',,,'
 
         az_wfs_db = 'home,srz/wfs,edaaaazepca00wm00gs0001,wfs'
         az_restrict_wfs_db = 'home,srz/wfs,edaaaazepca00wm00gs0001,wfs,srz'
         az_rahona_wfs_db = 'wfs,WFS,edaaaaze1pca00wm0dwm0001,wfs'
         dev_wfs_db = 'wfs,WFS,edaaaedle1devsrz,wfs'
         cz_staging_wfs_db = 'wfs,WFS,edaaaedle1prdsrz,wfs'
+        test_wfs_db = ',,,'
 
         az_wlp_db = 'home,srz/wlp,edaaaazepca00wm00gs0001,wlp'
         az_restrict_wlp_db = 'home,srz/wlp,edaaaazepca00wm00gs0001,wlp,srz'
         az_rahona_wlp_db = 'wlp,WLP,edaaaaze1pca00wm0dwm0001,wlp'
         dev_wlp_db = 'wlp,WLP,edaaaedle1devsrz,wlp'
         cz_staging_wlp_db = 'wlp,WLP,edaaaedle1prdsrz,wlp'
+        test_wlp_db = ',,,'
 
         az_w360_db = 'home,srz/w360,edaaaazepca00wm00gs0001,w360'
         az_restrict_w360_db = 'home,srz/w360,edaaaazepca00wm00gs0001,w360,srz'
         az_rahona_w360_db = 'w360,W360,edaaaaze1pca00wm0dwm0001,w360'
         dev_w360_db = 'w360,W360,edaaaedle1devsrz,w360'
         cz_staging_w360_db = 'w360,W360,edaaaedle1prdsrz,w360'
+        test_w360_db = ',,,'
 
         # cz specific variables
 
@@ -138,12 +157,14 @@ class All_Env_Specific_Variables:
         az_rahona_pbcontrib_db = 'tczcpbdw,cpbdw/rbpsw/pbcontrib_dbo,edaaaaze1pca00wm0dwm0001,unknown'
         dev_pbcontrib_db = 'tczcpbdw,cpbdw/rbpsw/pbcontrib_dbo,edaaatcze1devcz,unknown'
         cz_staging_pbcontrib_db = 'tczcpbdw,cpbdw/rbpsw/pbcontrib_dbo,edaaatcze1prdcz,unknown'
+        test_pbcontrib_db = ',,,'
 
         az_tcz04_db = 'home,curated/bbcmn/out,edaaaazepca00wm00gs0001,unknown'
         az_restrict_tcz04_db = 'home,curated/bbcmn/out,edaaaazepca00wm00gs0001,unknown,srz'
         az_rahona_tcz04_db = 'tcz0004,curated/bbcmn/out,edaaaaze1pca00wm0dwm0001,unknown'
         dev_tcz04_db = 'tcz0004,curated/bbcmn/out,edaaatcze1devcz,unknown'
         cz_staging_tcz04_db = 'tcz0004,curated/bbcmn/out,edaaatcze1prdcz,unknown'
+        test_tcz04_db = ',,,'
 
         az_rahona_cz_db = 'unknown,UNKNOWN,unknown,unknown'
 
@@ -151,41 +172,49 @@ class All_Env_Specific_Variables:
         az_restrict_cz01_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz01'
         dev_cz01_db = 'wcz0001,curated/wcz0001,edaaawcze1devcz,na'
         cz_staging_cz01_db = 'wcz0001,curated/wcz0001,edaaawcze1prdcz,na'
+        test_cz01_db = ',,,'
 
         az_cz01stg_db = 'home,curated/wcz0001,edaaaazepca00wm00gs0001,na'
         az_restrict_cz01stg_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz01'
         dev_cz01stg_db = 'wcz0001,curated/wcz0001,edaaawcze1stgcz,na'
         cz_staging_cz01stg_db = 'wcz0001,curated/wcz0001,edaaawcze1stgcz,na'
+        test_cz01stg_db = ',,,'
 
         az_cz02_db = 'home,curated/wcz0002,edaaaazepca00wm00gs0001,na'
         az_restrict_cz02_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz02'
         dev_cz02_db = 'wcz0002,curated/wcz0002,edaaawcze1devcz,na'
         cz_staging_cz02_db = 'wcz0002,curated/wcz0002,edaaawcze1prdcz,na'
+        test_cz02_db = ',,,'
 
         az_cz03_db = 'home,curated/wcz0003,edaaaazepca00wm00gs0001,na'
         az_restrict_cz03_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz03'
         dev_cz03_db = 'wcz0003,curated/wcz0003,edaaawcze1devcz,na'
         cz_staging_cz03_db = 'wcz0003,curated/wcz0003,edaaawcze1prdcz,na'
+        test_cz03_db = ',,,'
 
         az_cz03stg_db = 'home,curated/wcz0003,edaaaazepca00wm00gs0001,na'
         az_restrict_cz03stg_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz03'
         dev_cz03stg_db = 'wcz0001,curated/wcz0003,edaaawcze1stgcz,na'
         cz_staging_cz03stg_db = 'wcz0003,curated/wcz0003,edaaawcze1stgcz,na'
+        test_cz03stg_db = ',,,'
 
         az_cz04_db = 'home,curated/wcz0004,edaaaazepca00wm00gs0001,na'
         az_restrict_cz04_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz04'
         dev_cz04_db = 'wcz0004,curated/wcz0004,edaaawcze1devcz,na'
         cz_staging_cz04_db = 'wcz0004,curated/wcz0004,edaaawcze1prdcz,na'
+        test_cz04_db = ',,,'
 
         az_cz05_db = 'home,curated/wcz0005,edaaaazepca00wm00gs0001,na'
         az_restrict_cz05_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz05'
         dev_cz05_db = 'wcz0005,curated/wcz0005,edaaawcze1devcz,na'
         cz_staging_cz05_db = 'wcz0005,curated/wcz0005,edaaawcze1prdcz,na'
+        test_cz05_db = ',,,'
 
         az_cz06_db = 'home,curated/wcz0006,edaaaazepca00wm00gs0001,na'
         az_restrict_cz06_db = 'unknown,UNKNOWN,unknown,wealth_data_warehouse,cz06'
         dev_cz06_db = 'wcz0006,curated/wcz0006,edaaawcze1devcz,na'
         cz_staging_cz06_db = 'wcz0006,curated/wcz0006,edaaawcze1prdcz,na'
+        test_cz06_db = ',,,'
 
         # cz_base_path
 
@@ -204,7 +233,9 @@ class All_Env_Specific_Variables:
         cz_staging_cz_base_path = {'dc': 'abfss://wcz0003@edaaawcze1stgcz.dfs.core.windows.net/curated/wcz0003',
                                    'ep1': 'abfss://wcz0006@edaaawcze1stgcz.dfs.core.windows.net/curated/wcz0006',
                                    'ep2': 'abfss://wcz0006@edaaawcze1stgcz.dfs.core.windows.net/curated/wcz0006'}
-
+        test_cz_base_path = {'dc': 'abfss://processed@karadlsdev.dfs.core.windows.net',
+                               'ep1': 'abfss://processed@karadlsdev.dfs.core.windows.net',
+                               'ep2': 'abfss://processed@karadlsdev.dfs.core.windows.net'}
         # synapse specific variables
         # synapse srz variables
 
@@ -216,6 +247,7 @@ class All_Env_Specific_Variables:
         az_rahona_srz_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
         dev_srz_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
         cz_staging_srz_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
+        test_srz_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
 
         az_edw_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
         az_restrict_edw_synapse_conn = {'server': 'p3001-eastus2-asql-2.database.windows.net',
@@ -225,6 +257,7 @@ class All_Env_Specific_Variables:
         az_rahona_edw_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
         dev_edw_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
         cz_staging_edw_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
+        test_edw_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
 
         # synapse cz variables
 
@@ -236,6 +269,7 @@ class All_Env_Specific_Variables:
         az_rahona_cz01_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
         dev_cz01_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
         cz_staging_cz01_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
+        test_cz01_synapse_conn = {'server': '', 'database': '', 'scope': '', 'username': '', 'password': ''}
 
         # synapse main(old) variables
 
@@ -259,6 +293,7 @@ class All_Env_Specific_Variables:
                             'ep2':{'server':'d3004-eastus2-asql-42.database.windows.net','database':'eda-akora-aawcz-wcz0005pooldev','scope':'aawcz',
                                 'username':'SP_ADB_AAWCZ_WCZ0005_DEV-AppID','password':'SP_ADB_AAWCZ_WCZ0005_DEV-PWD'}}
         cz_staging_main_synapse_conn = {}
+        test_main_synapse_conn = {}
 
         # Variables that change accross different env
         exec(f"self.cdic_db={env}_cdic_db.split(',')")
@@ -333,7 +368,7 @@ class All_Env_Specific_Variables:
     
     def common_vars_add_to_config(self, config_file_path):
 
-        sys.path.insert(1, f'{self.dbfs_folder_base_path}/python'.replace('//','/'))
+        sys.path.insert(1, f'{self.dbfs_folder_base_path}/Scripts/python'.replace('//','/'))
         import dates_needed
 
         # self.comman_variables()
