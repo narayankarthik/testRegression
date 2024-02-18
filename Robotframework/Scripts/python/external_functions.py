@@ -350,7 +350,7 @@ def create_temp_direct_view(container_name='', storage_acc_name='', folder_path=
 # ----------
 
 def current_user_info():
-    name_mapping = {'karthik':'kar', 'jeremy':'jer', 'hita':'hit', 'vaishnaviben':'vai', 'srutha':'sru', 'sridevi':'sri', 'reshma':'res', 'shitalben':'shi', 'michael':'mic', 'asha':'ash'}
+    name_mapping = {'karthik':'kar', 'narayankarthik19':'kar', 'jeremy':'jer', 'hita':'hit', 'vaishnaviben':'vai', 'srutha':'sru', 'sridevi':'sri', 'reshma':'res', 'shitalben':'shi', 'michael':'mic', 'asha':'ash'}
     user_name = dbutilspkg.notebook.entry_point.getDbutils().notebook().getContext().userName().get().split('@')[0]
     user_prefix = name_mapping.get(user_name.split('.')[0])
     print(f'\nuser_name:{user_name}, user_prefix:{user_prefix}')

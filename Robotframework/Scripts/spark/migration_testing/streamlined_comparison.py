@@ -94,9 +94,10 @@ conf = dates_needed.add_aditional_parameters(config_file_path, tgt_table_cz_path
 
 # 3 required variable, dont remove them but you can pass ""(blank) as the value
 non_nullable_col = ""
-pk_col = "bor_account_id,party_surrogate_key,other_party_id,private_banking_indicator"
-ignore_col = "last_insert_timestamp"
-conf = dates_needed.add_aditional_parameters(config_file_path, non_nullable_col=non_nullable_col, pk_col=pk_col, ignore_col=ignore_col)
+pk_col = "c_custkey"
+ignore_col = ""
+important_col = ""
+conf = dates_needed.add_aditional_parameters(config_file_path, non_nullable_col=non_nullable_col, pk_col=pk_col, ignore_col=ignore_col, important_col=important_col)
 
 # ----------
 
@@ -129,7 +130,6 @@ spark.sql(f"select count(*) from global_temp.temp_qa_{table_name}_final").show()
 ####### Update this cell #######
 
 # Tgt part
-# Reverse the comment on tgt_df once we have actual data in the table
 tgt_df = df
 # changing columns to lower case
 for col_name in tgt_df.columns:
