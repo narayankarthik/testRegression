@@ -1,0 +1,8 @@
+obscure_user_name: eNrLSyxKrMw2BQALgwK8
+obscure_password: eNrLTM4oKs02NQYADmEC7w==
+auth_key: bmFyYXlrNTpUZUdnTklldGlhSmp2c0oxNDZ0U1hUOHd4QkpnNXdxMFdYaFNVSA==
+jtmf_host: https://jtmf.td.com
+project_key: TDAASWLTH
+pod: DAASWLTH| POD-Data Curation
+fix_version: WLTH|FY24|12-05|PI1 V24.3
+sprint: DAASWLTH| FY22Q2-Sprint 3
