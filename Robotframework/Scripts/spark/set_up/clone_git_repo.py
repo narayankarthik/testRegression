@@ -17,8 +17,8 @@
 # MAGIC cd $HOME/karthik
 # MAGIC git config --global user.name "Karthik.Narayan"
 # MAGIC git config --global user.email "narayankarthik19@gmail.com"
-# MAGIC repo_token = ""
-# MAGIC user = "narayankarthik"
+# MAGIC repo_token=""
+# MAGIC user="narayankarthik"
 # git clone https://$user:$repo_token@github.com/narayankarthik/testRegression.git
 # MAGIC # git -c "http.extraHeader=Authorization: Bearer $repo_token" clone "https://github.com/narayankarthik/testRegression.git"
 

@@ -72,7 +72,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     # ----------
 
     # Src part
-    if file_view_flag == 'view':
+    if 'view' in file_view_flag:
         print('Getting Source data from View')
         spark.sql(f"select * from global_temp.temp_qa_{table_name}{table_suffix}{synapse_suffix}_final").createOrReplaceTempView('qa_src_final_table')
         # spark.sql(f"select * from global_temp.temp_dev_{table_name}{table_suffix}{synapse_suffix}_final").createOrReplaceTempView('dev_src_final_table')
@@ -242,5 +242,6 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
 
     sanity_df.createOrReplaceGlobalTempView('temp_{0}_unittest_result_summary'.format(table_name))
     print('unittest_result_summary global temp view created: temp_{0}_unittest_result_summary'.format(table_name))
-    sanity_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
-    print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")
+    if file_view_flag == 'view_all':
+        sanity_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
+        print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")

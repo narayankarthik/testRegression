@@ -10,7 +10,24 @@ spark = SparkSession.builder.appName(app_name).getOrCreate()
 
 def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_path='', pk_col='', env='dev', pod_name='ep1', file_view_flag='file', 
             dbfs_folder_base_path='/dbfs/FileStore/tables/DaaSWealth_QA/Main/', passed_as_of_date='20230425', extract_prep_flag='prep', join_type='full'):
-    
+    """
+
+    Args:
+        table_name:
+        script_type:
+        config_file_path:
+        pk_col:
+        env:
+        pod_name:
+        file_view_flag: file/view/view_all
+        dbfs_folder_base_path:
+        passed_as_of_date:
+        extract_prep_flag:
+        join_type:
+
+    Returns:
+
+    """
     sys.path.insert(1, f'{dbfs_folder_base_path}/python'.replace('//','/'))
     sys.path.insert(1, f'{dbfs_folder_base_path}/spark/common'.replace('//','/'))
     import external_functions
@@ -77,7 +94,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
 
     # Src part
     # src_df = spark.sql(f"select * from temp_qa_{table_name}_final")
-    if file_view_flag == 'view':
+    if 'view' in file_view_flag:
         print('Getting Source data from View')
         src_df = spark.sql(f"select * from global_temp.temp_qa_{table_name}{table_suffix}{synapse_suffix}_final")
     else:
@@ -214,5 +231,6 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     # finla_df.write.mode("overwrite").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_kar')
     finla_df.createOrReplaceGlobalTempView('temp_{0}_regression_result_summary'.format(table_name))
     print('regression_result_summary global temp view created: temp_{0}_regression_result_summary'.format(table_name))
-    finla_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
-    print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")
+    if file_view_flag == 'view_all':
+        finla_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
+        print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")
