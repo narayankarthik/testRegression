@@ -242,6 +242,6 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
 
     sanity_df.createOrReplaceGlobalTempView('temp_{0}_unittest_result_summary'.format(table_name))
     print('unittest_result_summary global temp view created: temp_{0}_unittest_result_summary'.format(table_name))
-    if file_view_flag == 'view_all':
+    if file_view_flag != 'view_all':
         sanity_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
         print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")
