@@ -177,8 +177,8 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
 if __name__ == '__main__':
     import sys
     if len(sys.argv)==8:
-        execute(table_name=sys.argv[0], script_type=sys.argv[1], config_file_path=sys.argv[2], env=sys.argv[3],
-                pod_name=sys.argv[4], dbfs_folder_base_path=sys.argv[5], passed_as_of_date=sys.argv[6], extract_prep_flag=sys.argv[7])
+        execute(table_name=sys.argv[1], script_type=sys.argv[2], config_file_path=sys.argv[3], env=sys.argv[4],
+                pod_name=sys.argv[5], dbfs_folder_base_path=sys.argv[6], passed_as_of_date=sys.argv[7], extract_prep_flag=sys.argv[8])
     else:
         print("""This scrip needs 8 arguments to be passed you didnt pass all of them.
         So running with default arguments.
