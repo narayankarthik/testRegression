@@ -177,12 +177,13 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
 if __name__ == '__main__':
     import sys
     if len(sys.argv)==8:
-        execute(table_name=sys.argv[1], script_type=sys.argv[2], config_file_path=sys.argv[3], env=sys.argv[4],
+        jtmf_params = execute(table_name=sys.argv[1], script_type=sys.argv[2], config_file_path=sys.argv[3], env=sys.argv[4],
                 pod_name=sys.argv[5], dbfs_folder_base_path=sys.argv[6], passed_as_of_date=sys.argv[7], extract_prep_flag=sys.argv[8])
     else:
         print("""This scrip needs 8 arguments to be passed you didnt pass all of them.
         So running with default arguments.
         Arguments needed: table_name, script_type, config_file_path, env, pod_name, 
                         dbfs_folder_base_path, passed_as_of_date, extract_prep_flag""")
-        execute(table_name='table_name', script_type='super_script', config_file_path='', env='test', pod_name='dc',
+        jtmf_params = execute(table_name='table_name', script_type='super_script', config_file_path='', env='test', pod_name='dc',
                 dbfs_folder_base_path='/dbfs/FileStore/testRepo/Mainkar/', passed_as_of_date='20230930', extract_prep_flag='prep')
+    sys.exit(jtmf_params)
