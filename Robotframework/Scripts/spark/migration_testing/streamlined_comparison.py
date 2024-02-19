@@ -164,12 +164,12 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
                     tgt_null_percentage,process_date,last_insert_timestamp
                 from global_temp.temp_{table_name}_unittest_result_summary''').show()
 
-    # ----------
-
-    overall_status, overall_file_path = external_functions.get_final_overall_status(table_name, cz_base_path, user_prefix, dbfs_folder_base_path)
-    print(f"Overall Status: {overall_status}")
-    jtmf_params = [{'table_name':table_name, 'overall_status':overall_status, 'config_params':conf}]
-    # jtmf_update.jtmf_update_main('TDAASWLTH-2611', jtmf_params, dbfs_folder_base_path, overall_file_path, config_file_path)
+    # # ----------
+    #
+    # overall_status, overall_file_path = external_functions.get_final_overall_status(table_name, cz_base_path, user_prefix, dbfs_folder_base_path)
+    # print(f"Overall Status: {overall_status}")
+    # jtmf_params = [{'table_name':table_name, 'overall_status':overall_status, 'config_params':conf}]
+    # # jtmf_update.jtmf_update_main('TDAASWLTH-2611', jtmf_params, dbfs_folder_base_path, overall_file_path, config_file_path)
 
 # ----------
 
