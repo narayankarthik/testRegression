@@ -180,7 +180,8 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
 # running the python file
 if __name__ == '__main__':
     import sys
-    if len(sys.argv)==8:
+    print(f"No of arguments: {sys.argv}")
+    if len(sys.argv)==9:
         jtmf_params = execute(table_name=sys.argv[1], script_type=sys.argv[2], config_file_path=sys.argv[3], env=sys.argv[4],
                 pod_name=sys.argv[5], dbfs_folder_base_path=sys.argv[6], passed_as_of_date=sys.argv[7], extract_prep_flag=sys.argv[8])
     else:
