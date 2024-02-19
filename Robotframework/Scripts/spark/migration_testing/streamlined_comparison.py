@@ -170,7 +170,11 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
     jtmf_params = {'table_name':table_name, 'overall_status':overall_status}    #, 'config_params':conf
     print(f"jtmf_params: {jtmf_params}")
     # jtmf_update.jtmf_update_main('TDAASWLTH-2611', jtmf_params, dbfs_folder_base_path, overall_file_path, config_file_path)
-    return jtmf_params
+
+    # ----------
+
+    result_file=f"{dbfs_folder_base_path.replace('/dbfs', '')}/Results/result.txt"
+    dbutilspkg.fs.put(result_file, str(jtmf_params), True)
 # ----------
 
 # running the python file
@@ -186,4 +190,3 @@ if __name__ == '__main__':
                         dbfs_folder_base_path, passed_as_of_date, extract_prep_flag""")
         jtmf_params = execute(table_name='table_name', script_type='super_script', config_file_path='', env='test', pod_name='dc',
                 dbfs_folder_base_path='/dbfs/FileStore/testRepo/Mainkar/', passed_as_of_date='20230930', extract_prep_flag='prep')
-    sys.exit(jtmf_params)
