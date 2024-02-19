@@ -47,7 +47,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
         db_names = cmn_vars.db_names
         if 'mount' in file_view_flag:
-            cz_base_path = cmn_vars.cz_mount_path
+            cz_base_path = f"dbfs:/{cmn_vars.cz_mount_path}"
         else:
             cz_base_path = cmn_vars.cz_base_path
 
@@ -83,7 +83,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     synapse_suffix = conf.get('synapse_suffix','')
     if script_type == 'sub_script':
         if 'mount' in file_view_flag:
-            cz_base_path = conf.get('cz_mount_path')
+            cz_base_path = f"dbfs:/{conf.get('cz_mount_path')}"
         else:
             cz_base_path = conf.get('cz_base_path')
 
