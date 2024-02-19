@@ -50,7 +50,7 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
         cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
         db_names = cmn_vars.db_names
-        cz_base_path = cmn_vars.cz_base_path
+        cz_base_path = cmn_vars.cz_mount_path    #cmn_vars.cz_base_path
 
         # calling required external functions
         folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
@@ -80,7 +80,7 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
     pk_col = conf.get('pk_col','')
     # tgt_extract_file_path = conf.get('tgt_extract_file_path')
     if script_type == 'sub_script':
-        cz_base_path = conf.get('cz_base_path')
+        cz_base_path = conf.get('cz_mount_path')    #conf.get('cz_base_path')
 
     # ----------
 

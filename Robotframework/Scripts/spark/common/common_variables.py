@@ -236,6 +236,27 @@ class All_Env_Specific_Variables:
         test_cz_base_path = {'dc': 'abfss://processed@karadlsdev.dfs.core.windows.net',
                                'ep1': 'abfss://processed@karadlsdev.dfs.core.windows.net',
                                'ep2': 'abfss://processed@karadlsdev.dfs.core.windows.net'}
+
+        # cz_mount_path
+
+        az_cz_mount_path = {'dc': 'mnt/home/curated/wcz0001',
+                           'ep1': 'mnt/home/curated/wcz0006',
+                           'ep2': 'mnt/home/curated/wcz0006'}
+        az_restrict_cz_mount_path = {'dc': 'mnt/home/data/delta_lake',
+                                    'ep1': 'mnt/home/data/delta_lake',
+                                    'ep2': 'mnt/home/data/delta_lake'}
+        az_rahona_cz_mount_path = {'dc': 'mnt/home/curated/wcz0001/dev_lob',
+                                    'ep1': 'mnt/home/curated/wcz0006_test',
+                                    'ep2': 'mnt/home/curated/wcz0006_test'}
+        dev_cz_mount_path = {'dc': 'mnt/wcz0001/curated/wcz0001',
+                            'ep1': 'mnt/wcz0006/curated/wcz0006',
+                            'ep2': 'mnt/wcz0006/curated/wcz0006'}
+        cz_staging_cz_mount_path = {'dc': 'mnt/wcz0003/curated/wcz0003',
+                                   'ep1': 'mnt/wcz0006/curated/wcz0006',
+                                   'ep2': 'mnt/wcz0006/curated/wcz0006'}
+        test_cz_mount_path = {'dc': 'mnt/processed',
+                             'ep1': 'mnt/processed',
+                             'ep2': 'mnt/processed'}
         # synapse specific variables
         # synapse srz variables
 
@@ -342,9 +363,11 @@ class All_Env_Specific_Variables:
         # Variables that change accross different env and pod_name
         exec(f"self.main_synapse_conn_dict={env}_main_synapse_conn")
         exec(f"self.cz_base_path_dict={env}_cz_base_path")
+        exec(f"self.cz_mount_path_dict={env}_cz_mount_path")
 
         self.main_synapse_conn = self.main_synapse_conn_dict.get(pod_name,'')
         self.cz_base_path = self.cz_base_path_dict.get(pod_name,'')
+        self.cz_mount_path = self.cz_mount_path_dict.get(pod_name,'')
 
         self.db_names = {'cdic':self.cdic_db, 'cif':self.cif_db, 'edw':self.edw_db, 'eoae':self.eoae_db,
                         'occw':self.occw_db, 'odr':self.odr_db, 'ossbr':self.ossbr_db, 'ptsql':self.ptsql_db,
@@ -356,7 +379,8 @@ class All_Env_Specific_Variables:
                         'cz06': self.cz06_db}
         self.synapse_conn = {'main_synapse_conn':self.main_synapse_conn, 'srz_synapse_conn':self.srz_synapse_conn,
                              'edw_synapse_conn':self.edw_synapse_conn, 'cz01_synapse_conn':self.cz01_synapse_conn}
-        print(f'db_names : {self.db_names}\nmain_synapse_conn: {self.main_synapse_conn}\ncz_base_path: {self.cz_base_path}')
+        print(f'db_names : {self.db_names}\nmain_synapse_conn: {self.main_synapse_conn}')
+        print(f'cz_base_path: {self.cz_base_path}\ncz_mount_path: {self.cz_mount_path}')
 
 
     def __str__(self):
@@ -387,7 +411,9 @@ class All_Env_Specific_Variables:
             if len(db_value) == 5:
                 malcode_dict[f'synapse_conn_{db_key}'] = db_value[4]
 
-        conf = dates_needed.add_aditional_parameters(config_file_path, dbfs_folder_base_path=self.dbfs_folder_base_path, **malcode_dict, **self.synapse_conn, cz_base_path=self.cz_base_path)
+        conf = dates_needed.add_aditional_parameters(config_file_path, dbfs_folder_base_path=self.dbfs_folder_base_path,
+                                                     **malcode_dict, **self.synapse_conn, cz_base_path=self.cz_base_path,
+                                                     cz_mount_path=self.cz_mount_path)
 
 # COMMAND ----------
 
