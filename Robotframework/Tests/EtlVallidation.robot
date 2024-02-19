@@ -12,12 +12,12 @@ Library           ../Scripts/python/EtlValidationTestSteps.py
 #Command: robot -d Results Tests/EtlVallidation.robot
 
 Run pipeline and get back the result
-    Pipeline name   pl_test_wait
+    Pipeline name   pl_test_adb
     Add Parameters for Duplicate Record Validation in ADLS
     #cpbdw  dimsubbranchs  pbss_dm  dev  rbpsw
     Get Bearer Token
     Trigger Specific Pipeline
-    Get activity output     set test variable
+    Get activity output     Run specified Notebook
 
 *** Keywords ***
 
