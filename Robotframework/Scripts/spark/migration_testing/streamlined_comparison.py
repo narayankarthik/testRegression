@@ -139,12 +139,12 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
 
     # ----------
 
-    pass_fail_result_summary_part.execute(table_name, 'sub_script', config_file_path, pk_col, env, pod_name, file_view_flag='view_all', dbfs_folder_base_path=dbfs_folder_base_path,
+    pass_fail_result_summary_part.execute(table_name, 'sub_script', config_file_path, pk_col, env, pod_name, file_view_flag='view', dbfs_folder_base_path=dbfs_folder_base_path,
                                             passed_as_of_date=passed_as_of_date, extract_prep_flag=extract_prep_flag)
 
     # ----------
 
-    target_table_unittest.execute(table_name, 'sub_script', config_file_path, env, pod_name, file_view_flag='view_all', dbfs_folder_base_path=dbfs_folder_base_path,
+    target_table_unittest.execute(table_name, 'sub_script', config_file_path, env, pod_name, file_view_flag='view', dbfs_folder_base_path=dbfs_folder_base_path,
                                     passed_as_of_date=passed_as_of_date, extract_prep_flag=extract_prep_flag)
 
     # ----------

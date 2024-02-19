@@ -7,7 +7,22 @@ from pyspark.dbutils import DBUtils
 
 def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_path='', env='dev', pod_name='ep1', file_view_flag='file', 
             dbfs_folder_base_path='/dbfs/FileStore/tables/DaaSWealth_QA/Main/', passed_as_of_date='20230425', extract_prep_flag='prep'):
+    """
 
+    Args:
+        table_name:
+        script_type:
+        config_file_path:
+        env:
+        pod_name:
+        file_view_flag: file/view/file-mount/view-mount
+        dbfs_folder_base_path:
+        passed_as_of_date:
+        extract_prep_flag:
+
+    Returns:
+
+    """
     sys.path.insert(1, f'{dbfs_folder_base_path}/python'.replace('//','/'))
     sys.path.insert(1, f'{dbfs_folder_base_path}/spark/common'.replace('//','/'))
     import external_functions
@@ -31,7 +46,10 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
         db_names = cmn_vars.db_names
-        cz_base_path = cmn_vars.cz_base_path
+        if 'mount' in file_view_flag:
+            cz_base_path = cmn_vars.cz_mount_path
+        else:
+            cz_base_path = cmn_vars.cz_base_path
 
         # setting folder structure and getting user specific prefix
         folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
@@ -64,7 +82,10 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     table_suffix = conf.get('table_suffix','')
     synapse_suffix = conf.get('synapse_suffix','')
     if script_type == 'sub_script':
-        cz_base_path = conf.get('cz_base_path')
+        if 'mount' in file_view_flag:
+            cz_base_path = conf.get('cz_mount_path')
+        else:
+            cz_base_path = conf.get('cz_base_path')
 
     tgt_table_cz_path = conf.get('tgt_table_cz_path')
     src_table_cz_path = conf.get('src_table_cz_path')
@@ -242,6 +263,5 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
 
     sanity_df.createOrReplaceGlobalTempView('temp_{0}_unittest_result_summary'.format(table_name))
     print('unittest_result_summary global temp view created: temp_{0}_unittest_result_summary'.format(table_name))
-    if file_view_flag != 'view_all':
-        sanity_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
-        print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")
+    sanity_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
+    print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")

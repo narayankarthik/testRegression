@@ -19,7 +19,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         pk_col:
         env:
         pod_name:
-        file_view_flag: file/view/view_all
+        file_view_flag: file/view/file-mount/view-mount
         dbfs_folder_base_path:
         passed_as_of_date:
         extract_prep_flag:
@@ -47,7 +47,10 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
         db_names = cmn_vars.db_names
-        cz_base_path = cmn_vars.cz_base_path
+        if 'mount' in file_view_flag:
+            cz_base_path = cmn_vars.cz_mount_path
+        else:
+            cz_base_path = cmn_vars.cz_base_path
 
         # setting folder structure and getting user specific prefix
         folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
@@ -75,7 +78,11 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     as_of_date = conf.get('as_of_date')
     process_date = conf.get('process_date')
     podium_delivery_date = conf.get('podium_delivery_date')
-    cz_base_path = conf.get('cz_base_path')
+    if script_type == 'sub_script':
+        if 'mount' in file_view_flag:
+            cz_base_path = conf.get('cz_mount_path')
+        else:
+            cz_base_path = conf.get('cz_base_path')
     user_prefix = conf.get('user_prefix')
     table_suffix = conf.get('table_suffix','')
     synapse_suffix = conf.get('synapse_suffix','')
@@ -231,6 +238,5 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     # finla_df.write.mode("overwrite").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_kar')
     finla_df.createOrReplaceGlobalTempView('temp_{0}_regression_result_summary'.format(table_name))
     print('regression_result_summary global temp view created: temp_{0}_regression_result_summary'.format(table_name))
-    if file_view_flag != 'view_all':
-        finla_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
-        print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")
+    finla_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
+    print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")
