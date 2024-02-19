@@ -188,5 +188,5 @@ if __name__ == '__main__':
         So running with default arguments.
         Arguments needed: table_name, script_type, config_file_path, env, pod_name, 
                         dbfs_folder_base_path, passed_as_of_date, extract_prep_flag""")
-        jtmf_params = execute(table_name='table_name', script_type='super_script', config_file_path='', env='test', pod_name='dc',
+        jtmf_params = execute(table_name='customer', script_type='super_script', config_file_path='', env='test', pod_name='dc',
                 dbfs_folder_base_path='/dbfs/FileStore/testRepo/Mainkar/', passed_as_of_date='20230930', extract_prep_flag='prep')
