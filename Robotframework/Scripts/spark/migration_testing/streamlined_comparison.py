@@ -150,19 +150,19 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
     # ----------
 
     print("Pass fail Result:")
-    spark.sql(f"select * from global_temp.temp_{table_name}_pass_fail").display()
+    spark.sql(f"select * from global_temp.temp_{table_name}_pass_fail").show()
     print('Regression result:')
     spark.sql(f'''select type,table_name,column_name,overall_Status,
                     src_count,tgt_count,pass_count,fail_count,null_count,
                     src_pass_percentage,tgt_pass_percentage,
                     tgt_null_percentage,process_date,last_insert_timestamp 
-                from global_temp.temp_{table_name}_regression_result_summary''').display()
+                from global_temp.temp_{table_name}_regression_result_summary''').show()
     print('Unittest result:')
     spark.sql(f'''select type,table_name,column_name,overall_Status,
                     src_count,tgt_count,pass_count,fail_count,null_count,
                     src_pass_percentage,tgt_pass_percentage,
                     tgt_null_percentage,process_date,last_insert_timestamp
-                from global_temp.temp_{table_name}_unittest_result_summary''').display()
+                from global_temp.temp_{table_name}_unittest_result_summary''').show()
 
     # ----------
 
