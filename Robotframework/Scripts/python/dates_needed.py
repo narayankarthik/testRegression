@@ -12,77 +12,30 @@ from dateutil.relativedelta import relativedelta
 app_name = "dates_needed"
 spark = SparkSession.builder.appName(app_name).getOrCreate()
 
-def create_config_file(passed_as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix, pod_name='', process_flag='reg', parameters_path='', 
-                        determination_date_day0_df=spark.createDataFrame([], StructType([])), synapse_suffix='', extract_prep_flag='prep', table_suffix=''):
+def create_config_file(passed_as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix,
+                       pod_name='', process_flag='reg', synapse_suffix='', extract_prep_flag='prep', table_suffix=''):
     print('\nAll parameters passed to create_config_file')
     print(f'passed_as_of_date:{passed_as_of_date}\nconfig_base_path:{config_base_path}\ntable_name:{table_name}')
     print(f'db_names:{db_names}\nenv:{env}\nprevdate_value:{prevdate_value}\npod_name{pod_name}')
-    print(f'process_flag{process_flag}\nparameters_path:{parameters_path}\nuser_prefix:{user_prefix}')
+    print(f'process_flag{process_flag}\nuser_prefix:{user_prefix}')
     print(f'synapse_suffix:{synapse_suffix}')
 
-    files_created = dict()
+    as_of_date = passed_as_of_date
+    file_name = f'config_file_{user_prefix}.yaml'
+    config_path = config_base_path+'/'+file_name
 
-    parameter_dict = {}
-    if process_flag == 'hod':
-        with open(parameters_path, 'r') as parameters_file:
-            for parameters_records in parameters_file:
-                parameters_records = parameters_records[:-1].split('|')
-                print(parameters_records)
-                as_of_date = parameters_records[0]
-                process_indicator = parameters_records[1]
-                run_day = parameters_records[2]
-                target_process_date = parameters_records[3]
+    parameter_dict = {'as_of_date':as_of_date}
 
-                passed_process_date = datetime.strptime(passed_as_of_date, "%Y%m%d").strftime("%Y-%m-%d")
-                passed_podium_delivery_date = passed_as_of_date + '000000'
-
-                file_name = f'config_file_process_{process_indicator}_{user_prefix}.yaml'
-                config_path = config_base_path+'/'+file_name
-
-                #get coresponding day 0 date(used in cdic_fid_t0800)
-                if (determination_date_day0_df.head() is None):
-                    print('Either cdic_determination_date table dosent have any record or it is not a holds table, so running daily BAU process')
-                    day0_determination_date = ''
-                    day0_passed_podium_delivery_date = ''
-                    day0_passed_as_of_date = ''
-                    day0_passed_process_date = ''
-                else:
-                    print('cdic_determination_date table has record for this date so calculating all the other parameters')
-                    determination_date_day0_collection = determination_date_day0_df.collect()[0]
-                    day0_determination_date = determination_date_day0_collection.determination_date
-                    day0_passed_podium_delivery_date=determination_date_day0_collection.ifw_effective_date
-                    day0_passed_as_of_date=day0_passed_podium_delivery_date[:8]
-                    day0_passed_process_date = str(datetime.strptime(str(day0_passed_as_of_date)[:10], "%Y%m%d").strftime("%Y-%m-%d"))
-
-                if ((process_indicator == 'T') or (process_indicator == 'P')) and (run_day == '1'):
-                    day0_target_process_date = day0_passed_process_date + day0_determination_date[4:]
-                else:
-                    day0_target_process_date = ''
-
-                parameter_dict = {'as_of_date':as_of_date, 'process_indicator':process_indicator, 'run_day':run_day, 'target_process_date':target_process_date, 
-                                    'passed_as_of_date':passed_as_of_date, 'passed_process_date':passed_process_date, 'passed_podium_delivery_date':passed_podium_delivery_date,
-                                    'day0_determination_date':day0_determination_date, 'day0_passed_podium_delivery_date':day0_passed_podium_delivery_date,
-                                    'day0_passed_as_of_date':day0_passed_as_of_date, 'day0_passed_process_date':day0_passed_process_date,
-                                    'day0_target_process_date':day0_target_process_date}
-
-                create_config_file_inner(as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix, pod_name, synapse_suffix, config_path, parameter_dict, extract_prep_flag, table_suffix)
-                files_created[process_indicator]=config_path
-    else:
-        as_of_date = passed_as_of_date
-        file_name = f'config_file_{user_prefix}.yaml'
-        config_path = config_base_path+'/'+file_name
-
-        parameter_dict = {'as_of_date':as_of_date}
-
-        create_config_file_inner(as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix, pod_name, synapse_suffix, config_path, parameter_dict, extract_prep_flag, table_suffix)
-        files_created = config_path
+    create_config_file_inner(as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix, pod_name, synapse_suffix, config_path, parameter_dict, extract_prep_flag, table_suffix)
+    files_created = config_path
 
     print(f'Config file(s) created: {files_created}')
     return files_created
 
 # COMMAND ----------
 
-def create_config_file_inner(as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix, pod_name, synapse_suffix, config_path, parameter_dict, extract_prep_flag, table_suffix):
+def create_config_file_inner(as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix,
+                             pod_name, synapse_suffix, config_path, parameter_dict, extract_prep_flag, table_suffix):
     print('\nAll parameters passed to create_config_file_inner')
     print(f'passed_as_of_date:{as_of_date}\nconfig_base_path:{config_base_path}\ntable_name:{table_name}')
     print(f'db_names:{db_names}\nenv:{env}\nprevdate_value:{prevdate_value}\nsynapse_suffix:{synapse_suffix}')
@@ -140,23 +93,6 @@ def create_config_file_inner(as_of_date, config_base_path, table_name, db_names,
 
     # Adding parameters from prep_table_info.json if it exists
     extract_config_data(config_file, config_base_path, table_name, pod_name, extract_prep_flag, table_suffix, synapse_suffix)
-    # prep_info_params = dict()
-    # if (os.path.exists(prep_table_info_file)):
-    #     with open(prep_table_info_file, 'r') as prep_config_file:
-    #         for prep_table_info in json.load(prep_config_file):
-    #             if prep_table_info['table_name'] == f'{table_name}{table_suffix}{synapse_suffix}':
-    #                 prep_info_params = prep_table_info
-    #                 prep_config_key_flag = 1
-    #                 break
-    #         if prep_config_key_flag == 0:
-    #             print(f'No record for {table_name}{synapse_suffix} present in the preparator config file: {prep_table_info_file}')
-    #     for cols_key, cols_value in prep_info_params.items():
-    #         if cols_key == 'table_name':
-    #             continue
-    #         print('{}={}'.format(cols_key,cols_value))
-    #         config_file.write('{}={}\n'.format(cols_key,cols_value))
-    # else:
-    #     print(f'Preparator config file not found:{prep_table_info_file}')
 
     config_file.close()
 
@@ -206,7 +142,8 @@ def prev_dates(config_file, prevdate_value, as_of_date):
 
     day_of_the_week = datetime.strptime(as_of_date, "%Y%m%d").strftime("%A")
 
-    if prevdate_value is not None:
+    # When previous date(process_date or as_of_date format) value is passed
+    if (prevdate_value is not None) and (prevdate_value not in ["weekdays", "alldays"]):
         if prevdate_value != '':
             try:    #if date has process_date format
                 previous_process_date = str(datetime.strptime(prevdate_value,"%Y-%m-%d").strftime("%Y-%m-%d"))
@@ -226,12 +163,19 @@ def prev_dates(config_file, prevdate_value, as_of_date):
             previous_as_of_date_wca = ''
             previous_process_date_wca = ''
             previous_podium_delivery_date_wca = ''
+    # When previous date value is NOT passed or is "weekdays"/"alldays"
     else:
-        # print('day_of_the_week:{}'.format(day_of_the_week))
-        if day_of_the_week != 'Monday':
-            previous_process_date = str(datetime.strptime(as_of_date, "%Y%m%d") + timedelta(days=-1))[:10]
+        prevdate_value = (prevdate_value or '') #Converting None to ''(empty)
+        # consider only weekdays
+        if prevdate_value.lower() == "weekdays":
+            # print('day_of_the_week:{}'.format(day_of_the_week))
+            if day_of_the_week != 'Monday':
+                previous_process_date = str(datetime.strptime(as_of_date, "%Y%m%d") + timedelta(days=-1))[:10]
+            else:
+                previous_process_date = str(datetime.strptime(as_of_date, "%Y%m%d") + timedelta(days=-3))[:10]
+        # consider all the days
         else:
-            previous_process_date = str(datetime.strptime(as_of_date, "%Y%m%d") + timedelta(days=-3))[:10]
+            previous_process_date = str(datetime.strptime(as_of_date, "%Y%m%d") + timedelta(days=-1))[:10]
         previous_as_of_date = str(datetime.strptime(previous_process_date, "%Y-%m-%d").strftime("%Y%m%d"))
         previous_podium_delivery_date = previous_as_of_date + '000000'
         previous_as_of_date_wca = datetime.strptime(previous_as_of_date, "%Y%m%d") + timedelta(days=1)
@@ -252,110 +196,36 @@ def prev_dates(config_file, prevdate_value, as_of_date):
 
 # COMMAND ----------
 
-def holds_process_parameters(passed_as_of_date, determination_date_df, process_flag_path, parameters_path, table_name=''):
-    non_day1_tables = ['cdic_fid_t0100', 'cdic_fid_t0110', 'cdic_fid_t0120', 'cdic_fid_t0130', 'cdic_fid_t0152', 'cdic_fid_t0153', 'cdic_fid_t0400',\
-                      'cdic_fid_t0500', 'cdic_fid_t0900', 'cdic_fid_agg_summary']
-    non_hold_tables = ['cdic_fid_rpts_summary', 'cdic_nbdr_arrangements', 'cdic_nbdr_clients', 'cdic_nfu_gls_astrade', 'cdic_rid_trust_balance',\
-                      'cdic_sei_accint_nfr', 'cdic_uci_generator', 'cdic_sei_uci', 'cdic_resp_rdsp_beneficiaries','cdic_nfu_bns','cdic_nfu_cannex',\
-                       'cdic_nbdr_extract','cdic_tdw_missing_beneficiaries','cdic_ext_fi_missing_beneficiaries','cdic_uci_ops_extract','cdic_t0700']
+def all_parameters_needed(passed_as_of_date, config_base_path, table_name, db_names, env, user_prefix, pod_name='',
+                            prevdate_value=None, process_flag='reg', synapse_suffix='', extract_prep_flag='prep', table_suffix=''):
+    """
 
-    print('\nAll parameters passed to holds_process_parameters')
-    print('passed_as_of_date:{}\ndetermination_date_df:{}\nprocess_flag_path:{}\nparameters_path:{}'.format(passed_as_of_date,determination_date_df,process_flag_path,parameters_path))
+    Args:
+        passed_as_of_date:
+        config_base_path:
+        table_name:
+        db_names:
+        env:
+        user_prefix:
+        pod_name:
+        prevdate_value: None(default)/date(process_date or as_of_date)/"weekdays"/"alldays"
+        process_flag:
+        determination_date_df:
+        determination_date_day0_df:
+        synapse_suffix:
+        extract_prep_flag:
+        table_suffix:
+    Returns:
 
-    day_of_the_week = datetime.strptime(passed_as_of_date, "%Y%m%d").strftime("%A")
-
-    if (determination_date_df.head() is None) or (table_name in non_hold_tables):
-        print('Either cdic_determination_date table dosent have any record or it is not a holds table, so running daily BAU process')
-        determination_date = passed_as_of_date
-        process_indicator = 'N'
-        run_day = '0'
-    else:
-        print('cdic_determination_date table has record for this date so calculating all the other parameters')
-        determination_date_collection = determination_date_df.collect()[0]
-        determination_date = determination_date_collection.determination_date
-        process_indicator = determination_date_collection.process_indicator
-        run_day = determination_date_collection.run_day_indicator
-
-    # this is a flag to stop process P and T to run their respective day 1 process after executing day 9 process
-    if (not os.path.exists(process_flag_path)):
-        PT_process_flag = 1
-    elif (os.path.getsize(process_flag_path) == 0):
-        PT_process_flag = 1
-    else:
-        process_flag_file = open(process_flag_path, 'r')
-        PT_process_flag = process_flag_file.readline()
-        process_flag_file.close()
-
-    #getting all the remaining parameters based on process_indicator
-    if process_indicator == 'N':
-        as_of_date = passed_as_of_date
-        target_process_date = datetime.strptime(passed_as_of_date,"%Y%m%d").strftime("%Y-%m-%d")
-    elif (process_indicator == 'T') or (process_indicator == 'P'):
-        as_of_date = datetime.strptime(determination_date,"%Y-%m-%d").strftime("%Y%m%d")
-        target_process_date = datetime.strptime(passed_as_of_date,"%Y%m%d").strftime("%Y-%m-%d")+determination_date[4:]
-        if (run_day == '9'):
-            PT_process_flag = 0
-        elif (run_day == '0'):
-            PT_process_flag = 1
-        else:
-            pass
-    else:
-        pass
-
-    print('All the parameters found in holds_process_parameters')
-    print('table_name:' + table_name)
-    print('determination_date:' + determination_date)
-    print('process_indicator:' + process_indicator)
-    print('run_day:' + run_day)
-    print('as_of_date:' + as_of_date)
-    print('target_process_date:' + target_process_date)
-    print('PT_process_flag:{}'.format(str(PT_process_flag)))
-
-    required_parameters = [as_of_date,process_indicator,run_day,target_process_date]
-
-    process_flag_file = open(process_flag_path, 'w')
-    process_flag_file.write(str(PT_process_flag))
-    process_flag_file.close()
-
-    with open(parameters_path, 'w', encoding='utf-8', newline='') as parameters_file:
-        writer = csv.writer(parameters_file, delimiter='|')
-        if (table_name in non_day1_tables) and (run_day == '1'):
-            print('ignoring {} day {} process'.format(table_name, run_day))
-            required_parameters.clear()
-        elif ((process_indicator == 'T') or (process_indicator == 'P')) and (str(PT_process_flag) == '0'):
-            print('ignoring T/P process going forward as day indicator has become 9 so waiting for T/P day 0 to restart the T/P process')
-            required_parameters.clear()
-        else:
-            if table_name == 'cdic_t0700':
-                required_parameters = [as_of_date, 'T', run_day, target_process_date]
-            writer.writerow(required_parameters)
-            print(required_parameters)
-
-        #below statement is to add a record to triger N process as well if T process is trigerd
-        #and also to triger N process if P process is run for day 9
-        if (process_indicator == 'T' or (process_indicator == 'P' and run_day == '9')):
-            target_process_date = datetime.strptime(passed_as_of_date,"%Y%m%d").strftime("%Y-%m-%d")
-            required_parameters = [passed_as_of_date,'N','0',target_process_date]
-            if (process_indicator == 'T' and day_of_the_week == 'Monday'):
-                print('Not Adding a record to triger N along T as its a Monday')
-            else:
-                print(required_parameters)
-                writer.writerow(required_parameters)
-
-# COMMAND ----------
-
-def all_parameters_needed(passed_as_of_date, config_base_path, table_name, db_names, env, user_prefix, pod_name='', prevdate_value=None, process_flag='reg', 
-                            determination_date_df=spark.createDataFrame([],StructType([])), determination_date_day0_df=spark.createDataFrame([], StructType([])), 
-                            synapse_suffix='', extract_prep_flag='prep', table_suffix=''):
+    """
     config_base_path = os.path.abspath(config_base_path)
     print('\nAll parameters passed to all_parameters_needed')
     print('passed_as_of_date:{}\nconfig_base_path:{}\ntable_name:{}'.format(passed_as_of_date, config_base_path, table_name))
     print('db_names:{}\nenv:{}\nuser_prefix:{}\npod_name:{}'.format(db_names, env, user_prefix, pod_name))
     print('prevdate_value:{}\nprocess_flag:{}\n'.format(prevdate_value, process_flag))
-    process_flag_path = config_base_path+'/PT_process_flag.txt'
     parameters_path = config_base_path+'/parameters.txt'
-    holds_process_parameters(passed_as_of_date, determination_date_df, process_flag_path, parameters_path, table_name)
-    files_created = create_config_file(passed_as_of_date, config_base_path, table_name, db_names, env, prevdate_value, user_prefix, pod_name, process_flag, parameters_path, determination_date_day0_df, synapse_suffix, extract_prep_flag, table_suffix)
+    files_created = create_config_file(passed_as_of_date, config_base_path, table_name, db_names, env, prevdate_value,
+                                       user_prefix, pod_name, process_flag, synapse_suffix, extract_prep_flag, table_suffix)
     return files_created
 
 # COMMAND ----------
