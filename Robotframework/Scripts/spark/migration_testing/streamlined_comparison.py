@@ -52,7 +52,7 @@ def execute(table_name='customer', script_type='super_script', config_file_path=
         pz_base_path = cmn_vars.pz_mount_path    #cmn_vars.pz_base_path
 
         # calling required external functions
-        external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
+        external_functions.create_required_dbfs_folder_structure(cmn_vars)
 
         # creating config file
         config_file_path = dates_needed.all_parameters_needed(passed_as_of_date, cmn_vars.folder_path_config, table_name,
