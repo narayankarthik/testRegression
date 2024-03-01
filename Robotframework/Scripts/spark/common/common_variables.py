@@ -41,13 +41,13 @@ class All_Env_Specific_Variables:
         self.current_user_info(dbutilspkg)
 
         # Variables that change across different env
-        exec(f"self.rz_db={env}_rz_db.split(',')")
-        exec(f"self.pz_db={env}_pz_db.split(',')")
+        exec(f"self.rz_db=self.{env}_rz_db.split(',')")
+        exec(f"self.pz_db=self.{env}_pz_db.split(',')")
         # Variables that change accross different env and pod_name
-        exec(f"self.pz_base_path_dict={env}_pz_base_path")
-        exec(f"self.pz_mount_path_dict={env}_pz_mount_path")
-        exec(f"self.rz_synapse_conn={env}_rz_synapse_conn")
-        exec(f"self.main_synapse_conn_dict={env}_main_synapse_conn")
+        exec(f"self.pz_base_path_dict=self.{env}_pz_base_path")
+        exec(f"self.pz_mount_path_dict=self.{env}_pz_mount_path")
+        exec(f"self.rz_synapse_conn=self.{env}_rz_synapse_conn")
+        exec(f"self.main_synapse_conn_dict=self.{env}_main_synapse_conn")
 
         self.pz_base_path = self.pz_base_path_dict.get(pod_name,'')
         self.pz_mount_path = self.pz_mount_path_dict.get(pod_name,'')

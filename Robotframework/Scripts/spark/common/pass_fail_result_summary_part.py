@@ -2,10 +2,6 @@
 import sys
 from pyspark.sql import SparkSession
 
-# Uncoment below 2 lines for actual python scripts in dbfs
-app_name = "external_functions"
-spark = SparkSession.builder.appName(app_name).getOrCreate()
-
 # COMMAND ----------
 
 def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_path='', pk_col='', env='dev', pod_name='ep1', file_view_flag='file', 
@@ -39,12 +35,19 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
 
     # ----------
 
+    # Uncoment below 2 lines for actual python scripts in dbfs
+    app_name = "pass_fail_result_summary"
+    spark = SparkSession.builder.appName(app_name).getOrCreate()
+    dbutilspkg = DBUtils(spark)
+
+    # ----------
+
     #variables that can be skipped based on weather script_type='sub_script'
     if script_type == 'super_script':
         # passed_as_of_date = '20230101'
 
         # running common variables and extracting the required variables
-        cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
+        cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbutilspkg, dbfs_folder_base_path)
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
         if 'mount' in file_view_flag:
             pz_base_path = cmn_vars.pz_mount_path

@@ -43,7 +43,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         # passed_as_of_date = '20230101'
 
         # running common variables and extracting the required variables
-        cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
+        cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbutilspkg, dbfs_folder_base_path)
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
         if 'mount' in file_view_flag:
             pz_base_path = cmn_vars.pz_mount_path

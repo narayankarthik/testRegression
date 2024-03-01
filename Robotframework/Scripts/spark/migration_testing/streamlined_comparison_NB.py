@@ -47,7 +47,7 @@ dbutilspkg = DBUtils(spark)
 if script_type == 'super_script':
 
     # running common variables and extracting the required variables
-    cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
+    cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbutilspkg, dbfs_folder_base_path)
     dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
     pz_base_path = cmn_vars.pz_mount_path  # cmn_vars.pz_base_path
 
