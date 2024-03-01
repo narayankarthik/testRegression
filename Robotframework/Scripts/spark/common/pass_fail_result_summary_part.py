@@ -46,23 +46,23 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         # running common variables and extracting the required variables
         cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
-        db_names = cmn_vars.db_names
         if 'mount' in file_view_flag:
-            cz_base_path = f"dbfs:/{cmn_vars.cz_mount_path}"
+            pz_base_path = cmn_vars.pz_mount_path
         else:
-            cz_base_path = cmn_vars.cz_base_path
+            pz_base_path = cmn_vars.pz_base_path
 
-        # setting folder structure and getting user specific prefix
-        folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
-        user_name, user_prefix = external_functions.current_user_info()
+        # calling required external functions
+        external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
 
         # creating config file
-        config_file_path = dates_needed.all_parameters_needed(passed_as_of_date, folder_path_config, table_name, db_names, env, user_prefix, pod_name, extract_prep_flag=extract_prep_flag)
+        config_file_path = dates_needed.all_parameters_needed(passed_as_of_date, cmn_vars.folder_path_config, table_name,
+                                                              cmn_vars.db_names, env, cmn_vars.user_prefix, pod_name,
+                                                              extract_prep_flag=extract_prep_flag)
         cmn_vars.common_vars_add_to_config(config_file_path)
 
-        tgt_table_cz_path = f'{cz_base_path}/{table_name}/'
-        src_table_cz_path = f'{cz_base_path}/rna_qa/qa_{table_name}_final'
-        dates_needed.add_aditional_parameters(config_file_path, tgt_table_cz_path=tgt_table_cz_path, src_table_cz_path=src_table_cz_path)
+        tgt_table_pz_path = f'{pz_base_path}/{table_name}/'
+        src_table_pz_path = f'{pz_base_path}/rna_qa/qa_{table_name}_final'
+        dates_needed.add_aditional_parameters(config_file_path, tgt_table_pz_path=tgt_table_pz_path, src_table_pz_path=src_table_pz_path)
 
     # ----------
 
@@ -80,9 +80,9 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     podium_delivery_date = conf.get('podium_delivery_date')
     if script_type == 'sub_script':
         if 'mount' in file_view_flag:
-            cz_base_path = f"dbfs:/{conf.get('cz_mount_path')}"
+            pz_base_path = conf.get('pz_mount_path')
         else:
-            cz_base_path = conf.get('cz_base_path')
+            pz_base_path = conf.get('pz_base_path')
     user_prefix = conf.get('user_prefix')
     table_suffix = conf.get('table_suffix','')
     synapse_suffix = conf.get('synapse_suffix','')
@@ -94,8 +94,8 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     threshold_col = conf.get('threshold_col', '')
     threshold_val_perc = float(conf.get('threshold_val_perc', "0.002"))
 
-    tgt_table_cz_path = conf.get('tgt_table_cz_path')
-    src_table_cz_path = conf.get('src_table_cz_path')
+    tgt_table_pz_path = conf.get('tgt_table_pz_path')
+    src_table_pz_path = conf.get('src_table_pz_path')
 
     # ----------
 
@@ -106,7 +106,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         src_df = spark.sql(f"select * from global_temp.temp_qa_{table_name}{table_suffix}{synapse_suffix}_final")
     else:
         print('Getting Source data from File')
-        src_df = spark.sql(f"select * from delta.`{src_table_cz_path}`")
+        src_df = spark.sql(f"select * from delta.`{src_table_pz_path}`")
     src_count = src_df.count()
     # print(src_df)
     print("src_df count: {0}".format(src_count))
@@ -192,7 +192,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     finla_df = finla_base_df.withColumn('testcase_id', lit('SF_REG_001')) \
                             .withColumn('testcase_description', lit('To validate all the columns')) \
                             .withColumn('type', lit('Regression')) \
-                            .withColumn('database_name', lit(tgt_table_cz_path)) \
+                            .withColumn('database_name', lit(tgt_table_pz_path)) \
                             .withColumn('table_name', lit('{0}'.format(table_name))) \
                             .withColumn('src_pass_percentage', round((col('pass_count') / col('src_count') * 100), 2)) \
                             .withColumn('tgt_pass_percentage', round((col('pass_count') / col('tgt_count') * 100), 2)) \
@@ -235,8 +235,8 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
 
     # ----------
 
-    # finla_df.write.mode("overwrite").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_kar')
+    # finla_df.write.mode("overwrite").format('delta').save(f'{pz_base_path}/rna_qa/rna_regression_summary_kar')
     finla_df.createOrReplaceGlobalTempView('temp_{0}_regression_result_summary'.format(table_name))
     print('regression_result_summary global temp view created: temp_{0}_regression_result_summary'.format(table_name))
-    finla_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
+    finla_df.write.mode("append").format('delta').save(f'{pz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
     print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")

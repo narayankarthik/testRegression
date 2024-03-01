@@ -45,23 +45,23 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         # running common variables and extracting the required variables
         cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
         dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
-        db_names = cmn_vars.db_names
         if 'mount' in file_view_flag:
-            cz_base_path = f"dbfs:/{cmn_vars.cz_mount_path}"
+            pz_base_path = cmn_vars.pz_mount_path
         else:
-            cz_base_path = cmn_vars.cz_base_path
+            pz_base_path = cmn_vars.pz_base_path
 
-        # setting folder structure and getting user specific prefix
-        folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
-        user_name, user_prefix = external_functions.current_user_info()
+        # calling required external functions
+        external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
 
         # creating config file
-        config_file_path = dates_needed.all_parameters_needed(passed_as_of_date, folder_path_config, table_name, db_names, env, user_prefix, pod_name, extract_prep_flag=extract_prep_flag)
+        config_file_path = dates_needed.all_parameters_needed(passed_as_of_date, cmn_vars.folder_path_config, table_name,
+                                                              cmn_vars.db_names, env, cmn_vars.user_prefix, pod_name,
+                                                              extract_prep_flag=extract_prep_flag)
         cmn_vars.common_vars_add_to_config(config_file_path)
 
-        tgt_table_cz_path = f'{cz_base_path}/{table_name}/'
-        src_table_cz_path = f'{cz_base_path}/rna_qa/qa_{table_name}_final'
-        dates_needed.add_aditional_parameters(config_file_path, tgt_table_cz_path=tgt_table_cz_path, src_table_cz_path=src_table_cz_path)
+        tgt_table_pz_path = f'{pz_base_path}/{table_name}/'
+        src_table_pz_path = f'{pz_base_path}/rna_qa/qa_{table_name}_final'
+        dates_needed.add_aditional_parameters(config_file_path, tgt_table_pz_path=tgt_table_pz_path, src_table_pz_path=src_table_pz_path)
 
     # ----------
 
@@ -83,12 +83,12 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
     synapse_suffix = conf.get('synapse_suffix','')
     if script_type == 'sub_script':
         if 'mount' in file_view_flag:
-            cz_base_path = f"dbfs:/{conf.get('cz_mount_path')}"
+            pz_base_path = conf.get('pz_mount_path')
         else:
-            cz_base_path = conf.get('cz_base_path')
+            pz_base_path = conf.get('pz_base_path')
 
-    tgt_table_cz_path = conf.get('tgt_table_cz_path')
-    src_table_cz_path = conf.get('src_table_cz_path')
+    tgt_table_pz_path = conf.get('tgt_table_pz_path')
+    src_table_pz_path = conf.get('src_table_pz_path')
 
     # ----------
 
@@ -99,8 +99,8 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
         # spark.sql(f"select * from global_temp.temp_dev_{table_name}{table_suffix}{synapse_suffix}_final").createOrReplaceTempView('dev_src_final_table')
     else:
         print('Getting Source data from File')
-        spark.sql(f"select * from delta.`{src_table_cz_path}`").createOrReplaceTempView('qa_src_final_table')
-        # spark.sql(f"select * from delta.`{tgt_table_cz_path}` WHERE Process_Date = '{process_date}'").createOrReplaceTempView('dev_src_final_table')
+        spark.sql(f"select * from delta.`{src_table_pz_path}`").createOrReplaceTempView('qa_src_final_table')
+        # spark.sql(f"select * from delta.`{tgt_table_pz_path}` WHERE Process_Date = '{process_date}'").createOrReplaceTempView('dev_src_final_table')
 
     # Tgt part
     tgt_df = spark.sql(f"select * from global_temp.temp_dev_{table_name}{table_suffix}{synapse_suffix}_final").createOrReplaceTempView('dev_src_final_table')
@@ -121,7 +121,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
                 SELECT 'SF_CNT_001' as testcase_id
                     ,'Record Count check for the table' as testcase_description
                     ,'Count' as type
-                    ,'{tgt_table_cz_path}' as Database_name
+                    ,'{tgt_table_pz_path}' as Database_name
                     ,'{table_name}{table_suffix}{synapse_suffix}' as Table_Name
                     ,'' as column_name
                     ,case when src_count=tgt_count then 'PASS' else 'FAIL' end as overall_Status
@@ -137,7 +137,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
                     ,cast(now() as string) as last_insert_timestamp
                     ,'{as_of_date}' as as_of_date
                 from src_count cross join tgt_count
-                """.format(tgt_table_cz_path=tgt_table_cz_path, as_of_date=as_of_date, process_date=process_date,
+                """.format(tgt_table_pz_path=tgt_table_pz_path, as_of_date=as_of_date, process_date=process_date,
                         table_name=table_name, table_suffix=table_suffix,synapse_suffix=synapse_suffix)
     # print("Query count_query:\n{0}".format(count_query))
     count_df = spark.sql(count_query)
@@ -158,7 +158,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
                     SELECT 'SF_NUL_001' as testcase_id
                         ,'Null check for the table' as testcase_description
                         ,'Null' as type
-                        ,'{tgt_table_cz_path}' as Database_name
+                        ,'{tgt_table_pz_path}' as Database_name
                         ,'{table_name}{table_suffix}{synapse_suffix}' as Table_Name
                         ,'{non_nullable_col}' as column_name
                         ,case when count(*) = 0 then 'PASS' else 'FAIL' end as overall_Status
@@ -175,7 +175,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
                         ,'{as_of_date}' as as_of_date
                     FROM dev_src_final_table
                     where ({non_nullable_str})
-                    """.format(tgt_table_cz_path=tgt_table_cz_path, as_of_date=as_of_date, process_date=process_date, 
+                    """.format(tgt_table_pz_path=tgt_table_pz_path, as_of_date=as_of_date, process_date=process_date,
                             table_name=table_name, non_nullable_col=non_nullable_col, non_nullable_str=non_nullable_str,
                             table_suffix=table_suffix,synapse_suffix=synapse_suffix)
         # print("Query null_query:\n{0}".format(null_query))
@@ -193,7 +193,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
                     SELECT 'SF_DUP_001' as testcase_id
                         ,'Duplicate check for the table' as testcase_description
                         ,'Duplicate' as type
-                        ,'{tgt_table_cz_path}' as Database_name
+                        ,'{tgt_table_pz_path}' as Database_name
                         ,'{table_name}{table_suffix}{synapse_suffix}' as Table_Name
                         ,'{pk_col}' as column_name
                         ,case when count(*) = 0 then 'PASS' else 'FAIL' end as overall_Status
@@ -215,7 +215,7 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
                         GROUP BY {pk_col}
                         HAVING count(*) > 1
                     )A
-                    """.format(tgt_table_cz_path=tgt_table_cz_path, as_of_date=as_of_date, process_date=process_date, 
+                    """.format(tgt_table_pz_path=tgt_table_pz_path, as_of_date=as_of_date, process_date=process_date,
                             table_name=table_name, pk_col=pk_col, table_suffix=table_suffix,synapse_suffix=synapse_suffix)
         # print("Query dupe_query:\n{0}".format(dupe_query))
         dupe_df = spark.sql(dupe_query)
@@ -263,5 +263,5 @@ def execute(table_name='srd_tdw_iss', script_type='super_script', config_file_pa
 
     sanity_df.createOrReplaceGlobalTempView('temp_{0}_unittest_result_summary'.format(table_name))
     print('unittest_result_summary global temp view created: temp_{0}_unittest_result_summary'.format(table_name))
-    sanity_df.write.mode("append").format('delta').save(f'{cz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
+    sanity_df.write.mode("append").format('delta').save(f'{pz_base_path}/rna_qa/rna_regression_summary_{user_prefix}')
     print(f"Have appended the new records to rna_regression_summary_{user_prefix}.")

@@ -7,7 +7,7 @@ from pyspark.dbutils import DBUtils
 
 ####### Update this cell #######
 
-# def execute(table_name='reporting_occ', script_type='super_script', config_file_path='', env='cz_staging', pod_name='dc',
+# def execute(table_name='reporting_occ', script_type='super_script', config_file_path='', env='test', pod_name='dc',
 #             dbfs_folder_base_path='/dbfs/FileStore/tables/DaaSWealth_QA/Main/', passed_as_of_date='20230425', extract_prep_flag='prep'):
 
 table_name='customer'
@@ -49,18 +49,18 @@ if script_type == 'super_script':
     # running common variables and extracting the required variables
     cmn_vars = common_variables.All_Env_Specific_Variables(env, pod_name, dbfs_folder_base_path)
     dbfs_folder_base_path = cmn_vars.dbfs_folder_base_path
-    db_names = cmn_vars.db_names
-    cz_base_path = cmn_vars.cz_mount_path    #cmn_vars.cz_base_path
+    pz_base_path = cmn_vars.pz_mount_path  # cmn_vars.pz_base_path
 
     # calling required external functions
-    folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
-    user_name, user_prefix = external_functions.current_user_info()
+    external_functions.create_required_dbfs_folder_structure(dbfs_folder_base_path)
 
     # creating config file
-    config_file_path = dates_needed.all_parameters_needed(passed_as_of_date, folder_path_config, table_name, db_names, env, user_prefix, pod_name, extract_prep_flag=extract_prep_flag)
+    config_file_path = dates_needed.all_parameters_needed(passed_as_of_date, cmn_vars.folder_path_config, table_name,
+                                                          cmn_vars.db_names, env, cmn_vars.user_prefix, pod_name,
+                                                          extract_prep_flag=extract_prep_flag)
     cmn_vars.common_vars_add_to_config(config_file_path)
 
-    # tgt_extract_file_path=f'{folder_path_tgt_data[5:]}/{table_name}/{table_name}_{passed_as_of_date}_mod.psv'
+    # tgt_extract_file_path=f'{cmn_vars.folder_path_tgt_data[5:]}/{table_name}/{table_name}_{passed_as_of_date}_mod.psv'
     # dates_needed.add_aditional_parameters(config_file_path, tgt_extract_file_path=tgt_extract_file_path)
 
 # ----------
@@ -80,24 +80,26 @@ podium_delivery_date = conf.get('podium_delivery_date')
 pk_col = conf.get('pk_col','')
 # tgt_extract_file_path = conf.get('tgt_extract_file_path')
 if script_type == 'sub_script':
-    cz_base_path = conf.get('cz_mount_path')    #conf.get('cz_base_path')
+    pz_base_path = conf.get('pz_mount_path')  # conf.get('pz_base_path')
 
 # ----------
 
 ####### Update this cell #######
 
 # Add testing specific path, you can hardcode it completely
-tgt_table_cz_path = f'{cz_base_path}/wealth_data_warehouse_db/{table_name}/'
-onprm_table_cz_path = f'{cz_base_path}/wealth_data_warehouse_db/{table_name}/'
-src_table_cz_path = f'{cz_base_path}/rna_qa/qa_{table_name}_final'
-conf = dates_needed.add_aditional_parameters(config_file_path, tgt_table_cz_path=tgt_table_cz_path, src_table_cz_path=src_table_cz_path, onprm_table_cz_path=onprm_table_cz_path)
+tgt_table_pz_path = f'{pz_base_path}/wealth_data_warehouse_db/{table_name}/'
+onprm_table_pz_path = f'{pz_base_path}/wealth_data_warehouse_db/{table_name}/'
+src_table_pz_path = f'{pz_base_path}/rna_qa/qa_{table_name}_final'
+conf = dates_needed.add_aditional_parameters(config_file_path, tgt_table_pz_path=tgt_table_pz_path,
+                                             src_table_pz_path=src_table_pz_path,
+                                             onprm_table_pz_path=onprm_table_pz_path)
 
-# 3 required variable, dont remove them but you can pass ""(blank) as the value
-non_nullable_col = ""
-pk_col = "c_custkey"
-ignore_col = ""
-important_col = ""
-conf = dates_needed.add_aditional_parameters(config_file_path, non_nullable_col=non_nullable_col, pk_col=pk_col, ignore_col=ignore_col, important_col=important_col)
+# # 3 required variable, dont remove them but you can pass ""(blank) as the value
+# non_nullable_col = ""
+# pk_col = "c_custkey"
+# ignore_col = ""
+# important_col = ""
+# conf = dates_needed.add_aditional_parameters(config_file_path, non_nullable_col=non_nullable_col, pk_col=pk_col, ignore_col=ignore_col, important_col=important_col)
 
 # ----------
 
@@ -166,11 +168,12 @@ spark.sql(f'''select type,table_name,column_name,overall_Status,
 
 # ----------
 
-overall_status, overall_file_path = external_functions.get_final_overall_status(table_name, cz_base_path, user_prefix, dbfs_folder_base_path)
+overall_status, overall_file_path = external_functions.get_final_overall_status(table_name, pz_base_path, cmn_vars.user_prefix, dbfs_folder_base_path)
 jtmf_params = {'table_name':table_name, 'overall_status':overall_status}    #, 'config_params':conf
 print(f"jtmf_params: {jtmf_params}")
 # jtmf_update.jtmf_update_main('TDAASWLTH-2611', jtmf_params, dbfs_folder_base_path, overall_file_path, config_file_path)
-dbutils.notebook.exit(jtmf_params)
+dbutilspkg.notebook.exit(jtmf_params)
+
 # ----------
 
 # # running the python file

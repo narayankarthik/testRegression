@@ -347,34 +347,44 @@ def create_temp_direct_view(container_name='', storage_acc_name='', folder_path=
                         order by {filter_key} desc""").show()
     return df_ful   #final_view_name
 
-# ----------
+# # ----------
+#
+# def current_user_info():
+#     name_mapping = {'karthik':'kar', 'narayankarthik19':'kar', 'jeremy':'jer', 'hita':'hit', 'vaishnaviben':'vai', 'srutha':'sru', 'sridevi':'sri', 'reshma':'res', 'shitalben':'shi', 'michael':'mic', 'asha':'ash'}
+#     user_name = dbutilspkg.notebook.entry_point.getDbutils().notebook().getContext().userName().get().split('@')[0]
+#     user_prefix = name_mapping.get(user_name.split('.')[0])
+#     print(f'\nuser_name:{user_name}, user_prefix:{user_prefix}')
+#     return user_name, user_prefix
+#
+# # ----------
+#
+# def get_required_dbfs_folder_structure(dbfs_folder_base_path):
+#     # dbfs_folder_base_path = '/dbfs/FileStore/tables/DaaSWealth_QA/Main'
+#     folder_path_config = f'{dbfs_folder_base_path}/Config'
+#     folder_path_logs = f'{dbfs_folder_base_path}/Logs'
+#     folder_path_data = f'{dbfs_folder_base_path}/Data'
+#     folder_path_src_data = f'{dbfs_folder_base_path}/Data/Source'
+#     folder_path_tgt_data = f'{dbfs_folder_base_path}/Data/Target'
+#     folder_path_results = f'{dbfs_folder_base_path}/Results'
+#     folder_path_scripts = f'{dbfs_folder_base_path}/Scripts'
+#     print(f"folder_path_config:{folder_path_config}\nfolder_path_logs:{folder_path_logs}\nfolder_path_data:{folder_path_data}")
+#     print(f"folder_path_src_data:{folder_path_src_data}\nfolder_path_tgt_data:{folder_path_tgt_data}\nfolder_path_results:{folder_path_results}")
+#     print(f"folder_path_scripts:{folder_path_scripts}")
+#     return folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts
 
-def current_user_info():
-    name_mapping = {'karthik':'kar', 'narayankarthik19':'kar', 'jeremy':'jer', 'hita':'hit', 'vaishnaviben':'vai', 'srutha':'sru', 'sridevi':'sri', 'reshma':'res', 'shitalben':'shi', 'michael':'mic', 'asha':'ash'}
-    user_name = dbutilspkg.notebook.entry_point.getDbutils().notebook().getContext().userName().get().split('@')[0]
-    user_prefix = name_mapping.get(user_name.split('.')[0])
-    print(f'\nuser_name:{user_name}, user_prefix:{user_prefix}')
-    return user_name, user_prefix
+def create_required_dbfs_folder_structure(common_var_folder_paths):    #dbfs_folder_base_path='/dbfs/FileStore/tables/DaaSWealth_QA/Main/'
+    # folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = get_required_dbfs_folder_structure(dbfs_folder_base_path)
 
-# ----------
+    folder_paths = common_var_folder_paths.folder_paths
+    dbfs_folder_base_path = folder_paths['dbfs_folder_base_path']
+    folder_path_config = folder_paths['folder_path_config']
+    folder_path_logs = folder_paths['folder_path_logs']
+    folder_path_src_data = folder_paths['folder_path_src_data']
+    folder_path_tgt_data = folder_paths['folder_path_tgt_data']
+    folder_path_results = folder_paths['folder_path_results']
+    folder_path_scripts = folder_paths['folder_path_scripts']
 
-def get_required_dbfs_folder_structure(dbfs_folder_base_path):
-    # dbfs_folder_base_path = '/dbfs/FileStore/tables/DaaSWealth_QA/Main'
-    folder_path_config = f'{dbfs_folder_base_path}/Config'
-    folder_path_logs = f'{dbfs_folder_base_path}/Logs'
-    folder_path_data = f'{dbfs_folder_base_path}/Data'
-    folder_path_src_data = f'{dbfs_folder_base_path}/Data/Source'
-    folder_path_tgt_data = f'{dbfs_folder_base_path}/Data/Target'
-    folder_path_results = f'{dbfs_folder_base_path}/Results'
-    folder_path_scripts = f'{dbfs_folder_base_path}/Scripts'
-    print(f"folder_path_config:{folder_path_config}\nfolder_path_logs:{folder_path_logs}\nfolder_path_data:{folder_path_data}")
-    print(f"folder_path_src_data:{folder_path_src_data}\nfolder_path_tgt_data:{folder_path_tgt_data}\nfolder_path_results:{folder_path_results}")
-    print(f"folder_path_scripts:{folder_path_scripts}")
-    return folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts
-    
-def create_required_dbfs_folder_structure(dbfs_folder_base_path='/dbfs/FileStore/tables/DaaSWealth_QA/Main/'):
-    folder_path_config, folder_path_logs, folder_path_src_data, folder_path_tgt_data, folder_path_results, folder_path_scripts = get_required_dbfs_folder_structure(dbfs_folder_base_path)
-    if dbfs_folder_base_path[:5]=='/dbfs':
+    if dbfs_folder_base_path[:5] == '/dbfs':
         dbutilspkg.fs.mkdirs(folder_path_config[5:])
         dbutilspkg.fs.mkdirs(folder_path_logs[5:])
         dbutilspkg.fs.mkdirs(folder_path_src_data[5:])
