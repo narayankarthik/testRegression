@@ -46,7 +46,7 @@ class All_Env_Specific_Variables:
         # Variables that change accross different env and pod_name
         exec(f"self.pz_base_path_dict=self.{env}_pz_base_path")
         exec(f"self.pz_mount_path_dict=self.{env}_pz_mount_path")
-        exec(f"self.rz_synapse_conn=self.{env}_rz_synapse_conn")
+        exec(f"self.pz_synapse_conn=self.{env}_pz_synapse_conn")
         exec(f"self.main_synapse_conn_dict=self.{env}_main_synapse_conn")
 
         self.pz_base_path = self.pz_base_path_dict.get(pod_name,'')
