@@ -153,14 +153,13 @@ class EtlValidationTestSteps:
 			activityName = TestActivity
 			pipelineRunId = self.pipeline.getPipelineRunId()
 			activityOutput = self.getActivityResponseOutput(pipelineRunId, activityName)
-			testCaseName = activityOutput.get("runOutput").get("Test Case Name")
-			validationStatus = activityOutput.get("runOutput").get("Test Execution Status")
-			validationReportUrl = activityOutput.get("runOutput").get("Report")
-			if validationStatus.strip().lower() != "passed":
-				print("Pipeline is FAILED")
+			table_name = activityOutput.get("runOutput").get("table_name")
+			overall_status = activityOutput.get("runOutput").get("overall_status")
+			if overall_status.strip().lower() != "pass":
+				print("Pipeline has FAILED")
 				#Assert.assertTrue("Pipeline is FAILED", validationStatus.trim().equalsIgnoreCase("passed")) // Commented out so that the download report step isn't skipped
 			else:
-				print(f"Activity status: {validationStatus}")
+				print(f"Activity status: {overall_status}")
 		except Exception as e:
 			print("Get Activity Output has failed")
 			# Assert.fail("Get Activity Output has failed")
